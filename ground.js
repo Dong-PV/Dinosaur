@@ -1,7 +1,9 @@
+
 // ground.js
+
 import { get_custom_property, increment_custom_property, set_custom_property } from './update_custom_property.js';
 
-const SPEED = .05
+const SPEED = .03
 const ground_elems = document.querySelectorAll('[data-ground]')
 
 export function setup_ground() {

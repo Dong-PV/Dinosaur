@@ -1,10 +1,6 @@
 
 // script.js
 
-setInterval(() => {
-
-}, 1000);
-
 import { setup_ground, update_ground } from './ground.js'
 import { setup_dino, update_dino, get_dino_rect, set_dino_lose } from './dino.js'
 import { update_cactus, setup_cactus, get_cactus_rects } from './cactus.js'
@@ -15,6 +11,7 @@ const SPEED_SCALE_INCREASE = .0001
 
 const world_elem = document.querySelector('[data-world]')
 const score_elem = document.querySelector('[data-score]')
+const speed_elem = document.querySelector('[data-speed]')
 const start_screen_elem = document.querySelector('[data-start-screen]')
 
 set_pixel_to_world_scale()
@@ -63,12 +60,13 @@ function is_collision(cact, dino) {
 }
 
 function update_score(delta) {
-  score += delta * .01
-  score_elem.textContent = Math.floor(score)
+  score += delta * .001
+  score_elem.textContent = 'Score: ' + score.toFixed(1)
 }
 
 function update_speed_scale(delta) {
-  speed_scale += delta * SPEED_SCALE_INCREASE
+  speed_scale = (speed_scale < 2) ? speed_scale + delta * SPEED_SCALE_INCREASE : 2
+  speed_elem.textContent = 'Speed: ' + speed_scale.toFixed(2)
 }
 
 function handle_start(e) {
@@ -85,10 +83,6 @@ function handle_start(e) {
 function handle_lose() {
   set_dino_lose()
   setTimeout(() => {
-    // document.addEventListener('keydown', ev => {
-    //   if (ev.code === 'Space')
-    //     on_jump()
-    // }, { once: true })
     document.addEventListener('keydown', function _(ev) {
       if (ev.code === 'Space') {
         handle_start()

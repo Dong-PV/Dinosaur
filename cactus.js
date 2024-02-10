@@ -1,11 +1,13 @@
+
 // cactus.js
+
 import {
   get_custom_property,
   increment_custom_property,
   set_custom_property
 } from "./update_custom_property.js"
 
-const SPEED = .05
+const SPEED = .03
 const CACTUS_INTERVAL_MIN = 500
 const CACTUS_INTERVAL_MAX = 2000
 const world_elem = document.querySelector('[data-world]')
@@ -25,9 +27,9 @@ export function update_cactus(delta, speed_scale) {
       cactus.remove()
     }
   })
-  if (next_cactus_time <= 0) {
+  if (next_cactus_time < 0) {
     create_cactus()
-    next_cactus_time = random_number_between(CACTUS_INTERVAL_MIN, CACTUS_INTERVAL_MAX) / speed_scale
+    next_cactus_time = random_number_between(CACTUS_INTERVAL_MIN, CACTUS_INTERVAL_MAX)
   }
   next_cactus_time -= delta
 }
@@ -42,12 +44,6 @@ export function get_dino_rect() {
     bottom: rect.bottom - (rect.bottom - rect.top) * (1 - ratio) / 2
   }
 }
-
-// export function get_cactus_rects() {
-//   return [...document.querySelectorAll('[data-cactus]')].map(cactus_elem => {
-//     return cactus_elem.getBoundingClientRect()
-//   })
-// }
 
 export function get_cactus_rects() {
   return [...document.querySelectorAll('[data-cactus]')].map(cactus_elem => {
@@ -72,5 +68,5 @@ function create_cactus() {
 }
 
 function random_number_between(min, max) {
-  return Math.floor(Math.random() * (max - min + 1))
+  return Math.random() * (max - min) + min
 }

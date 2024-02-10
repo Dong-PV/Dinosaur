@@ -3,7 +3,12 @@
 *::after {
   box-sizing: border-box;
   user-select: none;
-  /* border: 1px solid #DDD; */
+  /* hitbox option 1 */
+  /* overflow: hidden;
+  margin: -1px;
+  border: 1px solid red; */
+  /* hitbox option 2 */
+  /* outline: 1px solid red; */
 }
 
 body {
@@ -27,6 +32,13 @@ body {
   font-size: 5vmin;
   right: 1vmin;
   top: 1vmin;
+}
+
+.speed {
+  position: absolute;
+  font-size: 5vmin;
+  right: 1vmin;
+  top: 7vmin;
 }
 
 .start-screen {

@@ -1,4 +1,6 @@
+
 // update_custom_property.js
+
 export function get_custom_property(elem, prop) {
   return parseFloat(getComputedStyle(elem).getPropertyValue(prop)) || 0
 }
