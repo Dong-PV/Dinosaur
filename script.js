@@ -1,6 +1,13 @@
+
 // script.js
+
+setInterval(() => {
+
+}, 1000);
+
 import { setup_ground, update_ground } from './ground.js'
-import { setup_dino, update_dino } from './dino.js'
+import { setup_dino, update_dino, get_dino_rect, set_dino_lose } from './dino.js'
+import { update_cactus, setup_cactus, get_cactus_rects } from './cactus.js'
 
 const WORLD_WIDTH = 100
 const WORLD_HEIGHT = 30
@@ -11,14 +18,20 @@ const score_elem = document.querySelector('[data-score]')
 const start_screen_elem = document.querySelector('[data-start-screen]')
 
 set_pixel_to_world_scale()
-window.addEventListener("resize", set_pixel_to_world_scale)
-document.addEventListener("keydown", handle_start, { once: true })
-
 setup_ground()
+
+window.addEventListener('resize', set_pixel_to_world_scale)
+document.addEventListener('keydown', function _(ev) {
+  if (ev.code === 'Space') {
+    handle_start()
+    document.removeEventListener('keydown', _)
+  }
+})
 
 let last_time
 let speed_scale
 let score
+
 function update(time) {
   if (last_time == null) {
     last_time = time
@@ -30,8 +43,23 @@ function update(time) {
   update_dino(delta, speed_scale)
   update_speed_scale(delta)
   update_score(delta)
+  update_cactus(delta, speed_scale)
+  if (check_lose())
+    return handle_lose()
   last_time = time
   window.requestAnimationFrame(update)
+}
+
+function check_lose() {
+  const dino_rect = get_dino_rect()
+  return get_cactus_rects().some(cactus_rect => is_collision(cactus_rect, dino_rect))
+}
+
+function is_collision(cact, dino) {
+  return (
+    cact.left < dino.right && cact.top < dino.bottom &&
+    cact.right > dino.left && cact.bottom > dino.top
+  )
 }
 
 function update_score(delta) {
@@ -43,14 +71,32 @@ function update_speed_scale(delta) {
   speed_scale += delta * SPEED_SCALE_INCREASE
 }
 
-function handle_start() {
+function handle_start(e) {
   last_time = null
   speed_scale = 1
   score = 0
   setup_ground()
   setup_dino()
-  start_screen_elem.classList.add("hide")
+  setup_cactus()
+  start_screen_elem.classList.add('hide')
   window.requestAnimationFrame(update)
+}
+
+function handle_lose() {
+  set_dino_lose()
+  setTimeout(() => {
+    // document.addEventListener('keydown', ev => {
+    //   if (ev.code === 'Space')
+    //     on_jump()
+    // }, { once: true })
+    document.addEventListener('keydown', function _(ev) {
+      if (ev.code === 'Space') {
+        handle_start()
+        document.removeEventListener('keydown', _)
+      }
+    })
+    start_screen_elem.classList.remove('hide')
+  }, 1000);
 }
 
 function set_pixel_to_world_scale() {

@@ -3,9 +3,9 @@ import {
   get_custom_property,
   increment_custom_property,
   set_custom_property
-} from "./update_custom_property.js"
+} from './update_custom_property.js'
 
-const dino_elem = document.querySelector("[data-dino]")
+const dino_elem = document.querySelector('[data-dino]')
 const JUMP_SPEED = .45
 const GRAVITY = .0015
 const DINO_FRAME_COUNT = 2
@@ -15,14 +15,34 @@ let is_jumping
 let dino_frame
 let current_frame_time
 let y_velocity
+
+export function set_dino_lose() {
+  dino_elem.src = 'img/dino-lose.png'
+}
+
 export function setup_dino() {
   is_jumping = false
   dino_frame = 0
   current_frame_time = 0
   y_velocity = 0
-  set_custom_property(dino_elem, "--bottom", 0)
-  document.removeEventListener("keydown", on_jump)
-  document.addEventListener("keydown", on_jump)
+  set_custom_property(dino_elem, '--bottom', 0)
+  document.removeEventListener('keydown', on_jump)
+  document.addEventListener('keydown', on_jump)
+}
+
+// export function get_dino_rect() {
+//   return dino_elem.getBoundingClientRect()
+// }
+
+export function get_dino_rect() {
+  const rect = dino_elem.getBoundingClientRect()
+  const ratio = .8
+  return {
+    left: rect.left + (rect.right - rect.left) * (1 - ratio) / 2,
+    top: rect.top + (rect.bottom - rect.top) * (1 - ratio) / 2,
+    right: rect.right - (rect.right - rect.left) * (1 - ratio) / 2,
+    bottom: rect.bottom - (rect.bottom - rect.top) * (1 - ratio) / 2
+  }
 }
 
 export function update_dino(delta, speed_scale) {
@@ -46,16 +66,16 @@ function handle_run(delta, speed_scale) {
 function handle_jump(delta) {
   if (!is_jumping)
     return
-  increment_custom_property(dino_elem, "--bottom", y_velocity * delta)
-  if (get_custom_property(dino_elem, "--bottom") <= 0) {
-    set_custom_property(dino_elem, "--bottom", 0)
+  increment_custom_property(dino_elem, '--bottom', y_velocity * delta)
+  if (get_custom_property(dino_elem, '--bottom') <= 0) {
+    set_custom_property(dino_elem, '--bottom', 0)
     is_jumping = false
   }
   y_velocity -= GRAVITY * delta
 }
 
 function on_jump(e) {
-  if (e.code !== "Space" || is_jumping)
+  if (e.code !== 'Space' || is_jumping)
     return
   y_velocity = JUMP_SPEED
   is_jumping = true

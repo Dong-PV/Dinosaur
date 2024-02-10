@@ -3,7 +3,7 @@
 *::after {
   box-sizing: border-box;
   user-select: none;
-  border: 1px solid #DDD;
+  /* border: 1px solid #DDD; */
 }
 
 body {
@@ -12,6 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  font-family: monospace;
 }
 
 .world {
@@ -23,7 +24,7 @@ body {
 
 .score {
   position: absolute;
-  font-size: 3vmin;
+  font-size: 5vmin;
   right: 1vmin;
   top: 1vmin;
 }
